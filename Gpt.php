@@ -18,7 +18,7 @@ use Symfony\AI\Platform\Model;
  * @author Christopher Hertel <mail@christopher-hertel.de>
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-class GPT extends Model
+class Gpt extends Model
 {
     public const GPT_35_TURBO = 'gpt-3.5-turbo';
     public const GPT_35_TURBO_INSTRUCT = 'gpt-3.5-turbo-instruct';

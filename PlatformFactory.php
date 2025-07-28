@@ -34,13 +34,13 @@ final readonly class PlatformFactory
 
         return new Platform(
             [
-                new GPT\ModelClient($httpClient, $apiKey),
+                new Gpt\ModelClient($httpClient, $apiKey),
                 new Embeddings\ModelClient($httpClient, $apiKey),
                 new DallE\ModelClient($httpClient, $apiKey),
                 new WhisperModelClient($httpClient, $apiKey),
             ],
             [
-                new GPT\ResultConverter(),
+                new Gpt\ResultConverter(),
                 new Embeddings\ResultConverter(),
                 new DallE\ResultConverter(),
                 new WhisperResponseConverter(),

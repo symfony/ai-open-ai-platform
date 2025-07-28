@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Platform\Bridge\OpenAi\GPT;
+namespace Symfony\AI\Platform\Bridge\OpenAi\Gpt;
 
-use Symfony\AI\Platform\Bridge\OpenAi\GPT;
+use Symfony\AI\Platform\Bridge\OpenAi\Gpt;
 use Symfony\AI\Platform\Exception\ContentFilterException;
 use Symfony\AI\Platform\Exception\RuntimeException;
 use Symfony\AI\Platform\Model;
@@ -38,7 +38,7 @@ final class ResultConverter implements PlatformResponseConverter
 {
     public function supports(Model $model): bool
     {
-        return $model instanceof GPT;
+        return $model instanceof Gpt;
     }
 
     public function convert(RawResultInterface|RawHttpResult $result, array $options = []): ResultInterface

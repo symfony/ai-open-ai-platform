@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Platform\Bridge\OpenAi\GPT;
+namespace Symfony\AI\Platform\Bridge\OpenAi\Gpt;
 
-use Symfony\AI\Platform\Bridge\OpenAi\GPT;
+use Symfony\AI\Platform\Bridge\OpenAi\Gpt;
 use Symfony\AI\Platform\Exception\InvalidArgumentException;
 use Symfony\AI\Platform\Model;
 use Symfony\AI\Platform\ModelClientInterface as PlatformResponseFactory;
@@ -38,7 +38,7 @@ final readonly class ModelClient implements PlatformResponseFactory
 
     public function supports(Model $model): bool
     {
-        return $model instanceof GPT;
+        return $model instanceof Gpt;
     }
 
     public function request(Model $model, array|string $payload, array $options = []): RawHttpResult

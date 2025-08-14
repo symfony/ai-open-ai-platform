@@ -81,8 +81,11 @@ class Gpt extends Model
             Capability::INPUT_MESSAGES,
             Capability::OUTPUT_TEXT,
             Capability::OUTPUT_STREAMING,
-            Capability::TOOL_CALLING,
         ];
+
+        if (self::GPT_5_CHAT !== $name) {
+            $capabilities[] = Capability::TOOL_CALLING;
+        }
 
         if (self::GPT_4O_AUDIO === $name) {
             $capabilities[] = Capability::INPUT_AUDIO;

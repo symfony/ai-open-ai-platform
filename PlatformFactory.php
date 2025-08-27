@@ -11,7 +11,7 @@
 
 namespace Symfony\AI\Platform\Bridge\OpenAi;
 
-use Symfony\AI\Platform\Bridge\OpenAi\Whisper\AudioNormalizer;
+use Symfony\AI\Platform\Bridge\OpenAi\Contract\OpenAiContract;
 use Symfony\AI\Platform\Bridge\OpenAi\Whisper\ModelClient as WhisperModelClient;
 use Symfony\AI\Platform\Bridge\OpenAi\Whisper\ResultConverter as WhisperResponseConverter;
 use Symfony\AI\Platform\Contract;
@@ -45,7 +45,7 @@ final readonly class PlatformFactory
                 new DallE\ResultConverter(),
                 new WhisperResponseConverter(),
             ],
-            $contract ?? Contract::create(new AudioNormalizer()),
+            $contract ?? OpenAiContract::create(),
         );
     }
 }

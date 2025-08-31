@@ -24,7 +24,7 @@ class FileNormalizer extends ModelContractNormalizer
     /**
      * @param File $data
      *
-     * @return array{type: 'file', file: array{filename: string, file_data: 'base64'}}
+     * @return array{type: 'file', file: array{filename: string, file_data: string}}
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {

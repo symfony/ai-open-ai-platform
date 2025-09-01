@@ -21,6 +21,8 @@ final readonly class UrlImage
     public function __construct(
         public string $url,
     ) {
-        '' !== $url || throw new InvalidArgumentException('The image url must be given.');
+        if ('' === $url) {
+            throw new InvalidArgumentException('The image url must be given.');
+        }
     }
 }

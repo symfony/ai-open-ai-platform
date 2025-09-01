@@ -28,8 +28,12 @@ final readonly class ModelClient implements PlatformResponseFactory
         #[\SensitiveParameter]
         private string $apiKey,
     ) {
-        '' !== $apiKey || throw new InvalidArgumentException('The API key must not be empty.');
-        str_starts_with($apiKey, 'sk-') || throw new InvalidArgumentException('The API key must start with "sk-".');
+        if ('' === $apiKey) {
+            throw new InvalidArgumentException('The API key must not be empty.');
+        }
+        if (!str_starts_with($apiKey, 'sk-')) {
+            throw new InvalidArgumentException('The API key must start with "sk-".');
+        }
     }
 
     public function supports(Model $model): bool

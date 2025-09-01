@@ -32,8 +32,12 @@ final readonly class ModelClient implements PlatformResponseFactory
         private string $apiKey,
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
-        '' !== $apiKey || throw new InvalidArgumentException('The API key must not be empty.');
-        str_starts_with($apiKey, 'sk-') || throw new InvalidArgumentException('The API key must start with "sk-".');
+        if ('' === $apiKey) {
+            throw new InvalidArgumentException('The API key must not be empty.');
+        }
+        if (!str_starts_with($apiKey, 'sk-')) {
+            throw new InvalidArgumentException('The API key must start with "sk-".');
+        }
     }
 
     public function supports(Model $model): bool

@@ -11,28 +11,24 @@
 
 namespace Symfony\AI\Platform\Bridge\OpenAi\Whisper;
 
+use Symfony\AI\Platform\Bridge\OpenAi\AbstractModelClient;
 use Symfony\AI\Platform\Bridge\OpenAi\Whisper;
-use Symfony\AI\Platform\Exception\InvalidArgumentException;
 use Symfony\AI\Platform\Model;
-use Symfony\AI\Platform\ModelClientInterface as BaseModelClient;
+use Symfony\AI\Platform\ModelClientInterface;
 use Symfony\AI\Platform\Result\RawHttpResult;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
-final readonly class ModelClient implements BaseModelClient
+final readonly class ModelClient extends AbstractModelClient implements ModelClientInterface
 {
     public function __construct(
         private HttpClientInterface $httpClient,
         #[\SensitiveParameter] private string $apiKey,
+        private ?string $region = null,
     ) {
-        if ('' === $apiKey) {
-            throw new InvalidArgumentException('The API key must not be empty.');
-        }
-        if (!str_starts_with($apiKey, 'sk-')) {
-            throw new InvalidArgumentException('The API key must start with "sk-".');
-        }
+        self::validateApiKey($apiKey);
     }
 
     public function supports(Model $model): bool
@@ -46,7 +42,7 @@ final readonly class ModelClient implements BaseModelClient
         $endpoint = Task::TRANSCRIPTION === $task ? 'transcriptions' : 'translations';
         unset($options['task']);
 
-        return new RawHttpResult($this->httpClient->request('POST', \sprintf('https://api.openai.com/v1/audio/%s', $endpoint), [
+        return new RawHttpResult($this->httpClient->request('POST', \sprintf('%s/v1/audio/%s', self::getBaseUrl($this->region), $endpoint), [
             'auth_bearer' => $this->apiKey,
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'body' => array_merge($options, $payload, ['model' => $model->getName()]),

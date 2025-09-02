@@ -24,19 +24,23 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 final readonly class PlatformFactory
 {
+    public const REGION_EU = 'EU';
+    public const REGION_US = 'US';
+
     public static function create(
         #[\SensitiveParameter] string $apiKey,
         ?HttpClientInterface $httpClient = null,
         ?Contract $contract = null,
+        ?string $region = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 
         return new Platform(
             [
-                new Gpt\ModelClient($httpClient, $apiKey),
-                new Embeddings\ModelClient($httpClient, $apiKey),
-                new DallE\ModelClient($httpClient, $apiKey),
-                new WhisperModelClient($httpClient, $apiKey),
+                new Gpt\ModelClient($httpClient, $apiKey, $region),
+                new Embeddings\ModelClient($httpClient, $apiKey, $region),
+                new DallE\ModelClient($httpClient, $apiKey, $region),
+                new WhisperModelClient($httpClient, $apiKey, $region),
             ],
             [
                 new Gpt\ResultConverter(),

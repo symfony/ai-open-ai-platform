@@ -21,6 +21,8 @@ final readonly class Base64Image
     public function __construct(
         public string $encodedImage,
     ) {
-        '' !== $encodedImage || throw new InvalidArgumentException('The base64 encoded image generated must be given.');
+        if ('' === $encodedImage) {
+            throw new InvalidArgumentException('The base64 encoded image generated must be given.');
+        }
     }
 }

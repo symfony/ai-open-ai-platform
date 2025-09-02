@@ -28,7 +28,9 @@ final readonly class ModelClient implements BaseModelClient
         #[\SensitiveParameter]
         private string $apiKey,
     ) {
-        '' !== $apiKey || throw new InvalidArgumentException('The API key must not be empty.');
+        if ('' === $apiKey) {
+            throw new InvalidArgumentException('The API key must not be empty.');
+        }
     }
 
     public function supports(Model $model): bool

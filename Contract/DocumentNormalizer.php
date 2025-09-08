@@ -13,6 +13,7 @@ namespace Symfony\AI\Platform\Bridge\OpenAi\Contract;
 
 use Symfony\AI\Platform\Bridge\OpenAi\Gpt;
 use Symfony\AI\Platform\Contract\Normalizer\ModelContractNormalizer;
+use Symfony\AI\Platform\Message\Content\Document;
 use Symfony\AI\Platform\Message\Content\File;
 use Symfony\AI\Platform\Model;
 
@@ -39,7 +40,7 @@ class DocumentNormalizer extends ModelContractNormalizer
 
     protected function supportedDataClass(): string
     {
-        return File::class;
+        return Document::class;
     }
 
     protected function supportsModel(Model $model): bool

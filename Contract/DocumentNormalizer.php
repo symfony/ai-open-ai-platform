@@ -19,7 +19,7 @@ use Symfony\AI\Platform\Model;
 /**
  * @author Guillermo Lengemann <guillermo.lengemann@gmail.com>
  */
-class FileNormalizer extends ModelContractNormalizer
+class DocumentNormalizer extends ModelContractNormalizer
 {
     /**
      * @param File $data

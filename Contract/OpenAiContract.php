@@ -24,7 +24,7 @@ final readonly class OpenAiContract extends Contract
     {
         return parent::create(
             new AudioNormalizer(),
-            new FileNormalizer(),
+            new DocumentNormalizer(),
             ...$normalizer
         );
     }

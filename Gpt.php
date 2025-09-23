@@ -73,10 +73,8 @@ class Gpt extends Model
     /**
      * @param array<mixed> $options The default options for the model usage
      */
-    public function __construct(
-        string $name,
-        array $options = [],
-    ) {
+    public function __construct(string $name, array $options = [])
+    {
         $capabilities = [
             Capability::INPUT_MESSAGES,
             Capability::OUTPUT_TEXT,

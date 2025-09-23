@@ -12,8 +12,6 @@
 namespace Symfony\AI\Platform\Bridge\OpenAi;
 
 use Symfony\AI\Platform\Bridge\OpenAi\Contract\OpenAiContract;
-use Symfony\AI\Platform\Bridge\OpenAi\Whisper\ModelClient as WhisperModelClient;
-use Symfony\AI\Platform\Bridge\OpenAi\Whisper\ResultConverter as WhisperResponseConverter;
 use Symfony\AI\Platform\Contract;
 use Symfony\AI\Platform\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
@@ -40,13 +38,13 @@ final readonly class PlatformFactory
                 new Gpt\ModelClient($httpClient, $apiKey, $region),
                 new Embeddings\ModelClient($httpClient, $apiKey, $region),
                 new DallE\ModelClient($httpClient, $apiKey, $region),
-                new WhisperModelClient($httpClient, $apiKey, $region),
+                new Whisper\ModelClient($httpClient, $apiKey, $region),
             ],
             [
                 new Gpt\ResultConverter(),
                 new Embeddings\ResultConverter(),
                 new DallE\ResultConverter(),
-                new WhisperResponseConverter(),
+                new Whisper\ResultConverter(),
             ],
             $contract ?? OpenAiContract::create(),
         );

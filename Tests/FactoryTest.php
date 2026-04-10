@@ -12,7 +12,7 @@
 namespace Symfony\AI\Platform\Bridge\OpenAi\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\AI\Platform\Bridge\OpenAi\PlatformFactory;
+use Symfony\AI\Platform\Bridge\OpenAi\Factory;
 use Symfony\AI\Platform\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -20,11 +20,11 @@ use Symfony\Component\HttpClient\MockHttpClient;
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final class PlatformFactoryTest extends TestCase
+final class FactoryTest extends TestCase
 {
     public function testItCreatesPlatformWithDefaultSettings()
     {
-        $platform = PlatformFactory::create('sk-test-api-key');
+        $platform = Factory::createPlatform('sk-test-api-key');
 
         $this->assertInstanceOf(Platform::class, $platform);
     }
@@ -32,7 +32,7 @@ final class PlatformFactoryTest extends TestCase
     public function testItCreatesPlatformWithCustomHttpClient()
     {
         $httpClient = new MockHttpClient();
-        $platform = PlatformFactory::create('sk-test-api-key', $httpClient);
+        $platform = Factory::createPlatform('sk-test-api-key', $httpClient);
 
         $this->assertInstanceOf(Platform::class, $platform);
     }
@@ -40,7 +40,7 @@ final class PlatformFactoryTest extends TestCase
     public function testItCreatesPlatformWithEventSourceHttpClient()
     {
         $httpClient = new EventSourceHttpClient(new MockHttpClient());
-        $platform = PlatformFactory::create('sk-test-api-key', $httpClient);
+        $platform = Factory::createPlatform('sk-test-api-key', $httpClient);
 
         $this->assertInstanceOf(Platform::class, $platform);
     }

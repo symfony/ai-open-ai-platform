@@ -48,7 +48,7 @@ final class ModelCatalogTest extends ModelCatalogTestCase
         yield 'gpt-5-mini' => ['gpt-5-mini', Gpt::class, [Capability::INPUT_MESSAGES, Capability::OUTPUT_TEXT, Capability::OUTPUT_STREAMING, Capability::TOOL_CALLING, Capability::INPUT_IMAGE, Capability::INPUT_PDF, Capability::OUTPUT_STRUCTURED]];
         yield 'gpt-5-nano' => ['gpt-5-nano', Gpt::class, [Capability::INPUT_MESSAGES, Capability::OUTPUT_TEXT, Capability::OUTPUT_STREAMING, Capability::TOOL_CALLING, Capability::INPUT_IMAGE, Capability::INPUT_PDF, Capability::OUTPUT_STRUCTURED]];
         yield 'gpt-5.5' => ['gpt-5.5', Gpt::class, [Capability::INPUT_MESSAGES, Capability::OUTPUT_TEXT, Capability::OUTPUT_STREAMING, Capability::TOOL_CALLING, Capability::INPUT_IMAGE, Capability::INPUT_PDF, Capability::OUTPUT_STRUCTURED]];
-        yield 'gpt-5.5-pro' => ['gpt-5.5-pro', Gpt::class, [Capability::INPUT_MESSAGES, Capability::OUTPUT_TEXT, Capability::OUTPUT_STREAMING, Capability::TOOL_CALLING, Capability::INPUT_IMAGE, Capability::INPUT_PDF]];
+        yield 'gpt-5.5-pro' => ['gpt-5.5-pro', Gpt::class, [Capability::INPUT_MESSAGES, Capability::OUTPUT_TEXT, Capability::TOOL_CALLING, Capability::INPUT_IMAGE, Capability::INPUT_PDF, Capability::OUTPUT_STRUCTURED]];
 
         // Embedding models
         yield 'text-embedding-ada-002' => ['text-embedding-ada-002', Embeddings::class, [Capability::INPUT_TEXT, Capability::EMBEDDINGS]];

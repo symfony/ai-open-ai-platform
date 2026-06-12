@@ -16,6 +16,7 @@ use Symfony\AI\Platform\Bridge\OpenAi\Gpt\ResultConverter;
 use Symfony\AI\Platform\Exception\AuthenticationException;
 use Symfony\AI\Platform\Exception\BadRequestException;
 use Symfony\AI\Platform\Exception\ContentFilterException;
+use Symfony\AI\Platform\Exception\ExceedContextSizeException;
 use Symfony\AI\Platform\Exception\RuntimeException;
 use Symfony\AI\Platform\Result\InMemoryRawResult;
 use Symfony\AI\Platform\Result\MultiPartResult;
@@ -277,6 +278,26 @@ class ResultConverterTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Response does not contain output');
+
+        $converter->convert(new RawHttpResult($httpResponse));
+    }
+
+    public function testThrowsExceedContextSizeExceptionOnContextLengthExceeded()
+    {
+        $converter = new ResultConverter();
+        $httpResponse = $this->createMock(ResponseInterface::class);
+        $httpResponse->method('getStatusCode')->willReturn(400);
+        $httpResponse->method('getContent')->willReturn(json_encode([
+            'error' => [
+                'message' => "This model's maximum context length is 128000 tokens. However, your messages resulted in 145575 tokens.",
+                'type' => 'invalid_request_error',
+                'param' => 'messages',
+                'code' => 'context_length_exceeded',
+            ],
+        ]));
+
+        $this->expectException(ExceedContextSizeException::class);
+        $this->expectExceptionMessage('maximum context length is 128000 tokens');
 
         $converter->convert(new RawHttpResult($httpResponse));
     }

@@ -5,6 +5,7 @@ CHANGELOG
 ----
 
  * Throw `ExceedContextSizeException` instead of `BadRequestException` when a 400 response reports a context overflow
+ * Throw `IncompleteStreamException` when a Responses stream ends before `response.completed`
 
 0.8
 ---

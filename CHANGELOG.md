@@ -7,6 +7,7 @@ CHANGELOG
  * Throw `ExceedContextSizeException` instead of `BadRequestException` when a 400 response reports a context overflow
  * Throw `IncompleteStreamException` when a Responses stream ends before `response.completed`
  * Replace malformed UTF-8 sequences in request bodies instead of aborting the request
+ * Throw `ModelNotFoundException` when a 404 response reports a missing model
 
 0.8
 ---

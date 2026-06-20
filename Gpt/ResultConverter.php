@@ -19,6 +19,7 @@ use Symfony\AI\Platform\Exception\ExceedContextSizeException;
 use Symfony\AI\Platform\Exception\IncompleteStreamException;
 use Symfony\AI\Platform\Exception\RateLimitExceededException;
 use Symfony\AI\Platform\Exception\RuntimeException;
+use Symfony\AI\Platform\Exception\ServerException;
 use Symfony\AI\Platform\Model;
 use Symfony\AI\Platform\Result\MultiPartResult;
 use Symfony\AI\Platform\Result\RawHttpResult;
@@ -84,6 +85,11 @@ final class ResultConverter implements ResultConverterInterface
             $errorMessage = json_decode($response->getContent(false), true)['error']['message'] ?? null;
 
             throw new RateLimitExceededException($resetTime ? self::parseResetTime($resetTime) : null, $errorMessage);
+        }
+
+        if (($code = $response->getStatusCode()) >= 500) {
+            $errorMessage = json_decode($response->getContent(false), true)['error']['message'] ?? null;
+            throw new ServerException($code, $errorMessage);
         }
 
         if ($options['stream'] ?? false) {
@@ -169,12 +175,34 @@ final class ResultConverter implements ResultConverterInterface
             $sawResponseEvent = true;
 
             if ('error' === $type) {
-                throw new RuntimeException($this->generateErrorMessage($this->extractStreamError($event)));
+                $error = $this->extractStreamError($event);
+                $message = $this->generateErrorMessage($error);
+
+                if ($this->isRateLimitError($error)) {
+                    throw new RateLimitExceededException(null, $message);
+                }
+
+                if ($this->isServerError($error)) {
+                    throw new ServerException(null, $message);
+                }
+
+                throw new RuntimeException($message);
             }
 
             if ('response.failed' === $type) {
                 $response = \is_array($event['response'] ?? null) ? $event['response'] : [];
-                throw new RuntimeException($this->generateErrorMessage($this->extractStreamError($response)));
+                $error = $this->extractStreamError($response);
+                $message = $this->generateErrorMessage($error);
+
+                if ($this->isRateLimitError($error)) {
+                    throw new RateLimitExceededException(null, $message);
+                }
+
+                if ($this->isServerError($error)) {
+                    throw new ServerException(null, $message);
+                }
+
+                throw new RuntimeException($message);
             }
 
             if ('response.incomplete' === $type) {
@@ -330,6 +358,24 @@ final class ResultConverter implements ResultConverterInterface
     private function generateErrorMessage(array $error): string
     {
         return \sprintf('Error "%s"-%s (%s): "%s".', $error['code'] ?? '-', $error['type'] ?? '-', $error['param'] ?? '-', $error['message'] ?? '-');
+    }
+
+    /**
+     * @param Error $error
+     */
+    private function isRateLimitError(array $error): bool
+    {
+        return \in_array($error['code'], ['rate_limit_exceeded', 'rate_limit_error', 'too_many_requests'], true)
+            || \in_array($error['type'], ['rate_limit_exceeded', 'rate_limit_error', 'too_many_requests'], true);
+    }
+
+    /**
+     * @param Error $error
+     */
+    private function isServerError(array $error): bool
+    {
+        return \in_array($error['code'], ['server_error', 'internal_error'], true)
+            || \in_array($error['type'], ['server_error', 'internal_error'], true);
     }
 
     /**

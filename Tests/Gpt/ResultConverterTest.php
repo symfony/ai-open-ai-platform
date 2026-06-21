@@ -224,6 +224,31 @@ class ResultConverterTest extends TestCase
         $this->assertSame('final', $result->getContent());
     }
 
+    public function testConvertSkipsBuiltInToolCallOutputItems()
+    {
+        $converter = new ResultConverter();
+        $httpResponse = $this->createMock(ResponseInterface::class);
+        $httpResponse->method('toArray')->willReturn([
+            'output' => [
+                ['type' => 'web_search_call', 'id' => 'ws_1', 'status' => 'completed'],
+                [
+                    'type' => 'message',
+                    'id' => 'msg_1',
+                    'role' => 'assistant',
+                    'content' => [[
+                        'type' => 'output_text',
+                        'text' => 'The answer is 42.',
+                    ]],
+                ],
+            ],
+        ]);
+
+        $result = $converter->convert(new RawHttpResult($httpResponse));
+
+        $this->assertInstanceOf(TextResult::class, $result);
+        $this->assertSame('The answer is 42.', $result->getContent());
+    }
+
     public function testContentFilterException()
     {
         $converter = new ResultConverter();

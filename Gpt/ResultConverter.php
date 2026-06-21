@@ -152,6 +152,14 @@ final class ResultConverter implements ResultConverterInterface
         return match ($type) {
             'message' => $this->convertOutputMessage($item),
             'reasoning' => $this->convertReasoning($item),
+            // Built-in server-side tool calls (web search, file search, code
+            // interpreter, image generation, computer use, MCP, …) are reported
+            // as their own output items but carry no assistant-facing result.
+            // Skip them so the actual message item is still converted instead of
+            // aborting the whole response.
+            'web_search_call', 'file_search_call', 'code_interpreter_call',
+            'image_generation_call', 'computer_call', 'local_shell_call',
+            'mcp_call', 'mcp_list_tools', 'mcp_approval_request' => [],
             default => throw new RuntimeException(\sprintf('Unsupported output type "%s".', $type)),
         };
     }

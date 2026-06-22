@@ -527,7 +527,7 @@ class ResultConverterTest extends TestCase
         $streamResult = $converter->convert($raw, ['stream' => true]);
 
         $this->expectException(IncompleteStreamException::class);
-        $this->expectExceptionMessage('OpenAI Responses stream ended before response.completed.');
+        $this->expectExceptionMessage('Responses API stream ended before response.completed.');
 
         iterator_to_array($streamResult->getContent());
     }
@@ -587,7 +587,7 @@ class ResultConverterTest extends TestCase
                     ],
                 ],
             ],
-        ], 'OpenAI Responses stream ended incomplete (max_output_tokens).'];
+        ], 'Responses API stream ended incomplete (max_output_tokens).'];
     }
 
     public function testStreamThrowsRateLimitExceptionOnRateLimitEvent()

@@ -9,17 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Platform\Bridge\OpenAi\DallE;
+namespace Symfony\AI\Platform\Bridge\OpenAi\Image;
 
-use Symfony\AI\Platform\Bridge\OpenAi\DallE;
+use Symfony\AI\Platform\Bridge\OpenAi\Image;
 use Symfony\AI\Platform\Exception\RuntimeException;
 use Symfony\AI\Platform\Model;
+use Symfony\AI\Platform\Result\BinaryResult;
 use Symfony\AI\Platform\Result\HttpStatusErrorHandlingTrait;
+use Symfony\AI\Platform\Result\MultiPartResult;
 use Symfony\AI\Platform\Result\RawHttpResult;
 use Symfony\AI\Platform\Result\RawResultInterface;
 use Symfony\AI\Platform\Result\ResultInterface;
 use Symfony\AI\Platform\ResultConverterInterface;
-use Symfony\AI\Platform\StructuredOutput\PlatformSubscriber;
 use Symfony\AI\Platform\TokenUsage\TokenUsageExtractorInterface;
 
 /**
@@ -33,7 +34,7 @@ final class ResultConverter implements ResultConverterInterface
 
     public function supports(Model $model): bool
     {
-        return $model instanceof DallE;
+        return $model instanceof Image;
     }
 
     public function convert(RawResultInterface|RawHttpResult $result, array $options = []): ResultInterface
@@ -48,18 +49,19 @@ final class ResultConverter implements ResultConverterInterface
             throw new RuntimeException('No image generated.');
         }
 
+        // The images endpoint only returns base64-encoded images; PNG is the default output format.
+        $mimeType = 'image/'.($options['output_format'] ?? 'png');
+
         $images = [];
         foreach ($result['data'] as $image) {
-            if ('url' === $options[PlatformSubscriber::RESPONSE_FORMAT]) {
-                $images[] = new UrlImage($image['url']);
-
-                continue;
-            }
-
-            $images[] = new Base64Image($image['b64_json']);
+            $images[] = BinaryResult::fromBase64($image['b64_json'], $mimeType);
         }
 
-        return new ImageResult($image['revised_prompt'] ?? null, $images);
+        if (1 === \count($images)) {
+            return $images[0];
+        }
+
+        return new MultiPartResult($images);
     }
 
     public function getTokenUsageExtractor(): ?TokenUsageExtractorInterface

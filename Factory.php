@@ -50,14 +50,14 @@ final class Factory
             [
                 new Gpt\ModelClient($httpClient, $apiKey, $region),
                 new Embeddings\ModelClient($httpClient, $apiKey, $region),
-                new DallE\ModelClient($httpClient, $apiKey, $region),
+                new Image\ModelClient($httpClient, $apiKey, $region),
                 new TextToSpeech\ModelClient($httpClient, $apiKey, $region),
                 new Whisper\ModelClient($httpClient, $apiKey, $region),
             ],
             [
                 new Gpt\ResultConverter(),
                 new Embeddings\ResultConverter(),
-                new DallE\ResultConverter(),
+                new Image\ResultConverter(),
                 new TextToSpeech\ResultConverter(),
                 new Whisper\ResultConverter(),
             ],

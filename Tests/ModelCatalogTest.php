@@ -11,9 +11,9 @@
 
 namespace Symfony\AI\Platform\Bridge\OpenAi\Tests;
 
-use Symfony\AI\Platform\Bridge\OpenAi\DallE;
 use Symfony\AI\Platform\Bridge\OpenAi\Embeddings;
 use Symfony\AI\Platform\Bridge\OpenAi\Gpt;
+use Symfony\AI\Platform\Bridge\OpenAi\Image;
 use Symfony\AI\Platform\Bridge\OpenAi\ModelCatalog;
 use Symfony\AI\Platform\Bridge\OpenAi\TextToSpeech;
 use Symfony\AI\Platform\Bridge\OpenAi\Whisper;
@@ -63,9 +63,11 @@ final class ModelCatalogTest extends ModelCatalogTestCase
         // Whisper models
         yield 'whisper-1' => ['whisper-1', Whisper::class, [Capability::INPUT_AUDIO, Capability::OUTPUT_TEXT]];
 
-        // DALL-E models
-        yield 'dall-e-2' => ['dall-e-2', DallE::class, [Capability::INPUT_TEXT, Capability::OUTPUT_IMAGE]];
-        yield 'dall-e-3' => ['dall-e-3', DallE::class, [Capability::INPUT_TEXT, Capability::OUTPUT_IMAGE]];
+        // Image models
+        yield 'gpt-image-1' => ['gpt-image-1', Image::class, [Capability::INPUT_TEXT, Capability::OUTPUT_IMAGE]];
+        yield 'gpt-image-1-mini' => ['gpt-image-1-mini', Image::class, [Capability::INPUT_TEXT, Capability::OUTPUT_IMAGE]];
+        yield 'gpt-image-1.5' => ['gpt-image-1.5', Image::class, [Capability::INPUT_TEXT, Capability::OUTPUT_IMAGE]];
+        yield 'gpt-image-2' => ['gpt-image-2', Image::class, [Capability::INPUT_TEXT, Capability::OUTPUT_IMAGE]];
     }
 
     protected function createModelCatalog(): ModelCatalogInterface

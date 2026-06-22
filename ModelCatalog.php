@@ -37,20 +37,6 @@ final class ModelCatalog extends AbstractModelCatalog
                     Capability::OUTPUT_IMAGE,
                 ],
             ],
-            'dall-e-2' => [
-                'class' => DallE::class,
-                'capabilities' => [
-                    Capability::INPUT_TEXT,
-                    Capability::OUTPUT_IMAGE,
-                ],
-            ],
-            'dall-e-3' => [
-                'class' => DallE::class,
-                'capabilities' => [
-                    Capability::INPUT_TEXT,
-                    Capability::OUTPUT_IMAGE,
-                ],
-            ],
             'gpt-3.5-turbo' => [
                 'class' => Gpt::class,
                 'capabilities' => [
@@ -499,42 +485,30 @@ final class ModelCatalog extends AbstractModelCatalog
                 ],
             ],
             'gpt-image-1' => [
-                'class' => Gpt::class,
+                'class' => Image::class,
                 'capabilities' => [
-                    Capability::INPUT_MESSAGES,
-                    Capability::OUTPUT_TEXT,
-                    Capability::OUTPUT_STREAMING,
-                    Capability::INPUT_IMAGE,
+                    Capability::INPUT_TEXT,
                     Capability::OUTPUT_IMAGE,
                 ],
             ],
             'gpt-image-1-mini' => [
-                'class' => Gpt::class,
+                'class' => Image::class,
                 'capabilities' => [
-                    Capability::INPUT_MESSAGES,
-                    Capability::OUTPUT_TEXT,
-                    Capability::OUTPUT_STREAMING,
-                    Capability::INPUT_IMAGE,
+                    Capability::INPUT_TEXT,
                     Capability::OUTPUT_IMAGE,
                 ],
             ],
             'gpt-image-1.5' => [
-                'class' => Gpt::class,
+                'class' => Image::class,
                 'capabilities' => [
-                    Capability::INPUT_MESSAGES,
-                    Capability::OUTPUT_TEXT,
-                    Capability::OUTPUT_STREAMING,
-                    Capability::INPUT_IMAGE,
+                    Capability::INPUT_TEXT,
                     Capability::OUTPUT_IMAGE,
                 ],
             ],
             'gpt-image-2' => [
-                'class' => Gpt::class,
+                'class' => Image::class,
                 'capabilities' => [
-                    Capability::INPUT_MESSAGES,
-                    Capability::OUTPUT_TEXT,
-                    Capability::OUTPUT_STREAMING,
-                    Capability::INPUT_IMAGE,
+                    Capability::INPUT_TEXT,
                     Capability::OUTPUT_IMAGE,
                 ],
             ],

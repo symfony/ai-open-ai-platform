@@ -16,6 +16,6 @@ use Symfony\AI\Platform\Model;
 /**
  * @author Denis Zunke <denis.zunke@gmail.com>
  */
-class DallE extends Model
+class Image extends Model
 {
 }

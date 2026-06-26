@@ -22,7 +22,10 @@ use Symfony\AI\Platform\Exception\IncompleteStreamException;
 use Symfony\AI\Platform\Exception\RateLimitExceededException;
 use Symfony\AI\Platform\Exception\RuntimeException;
 use Symfony\AI\Platform\Exception\ServerException;
+use Symfony\AI\Platform\Result\CodeExecutionResult;
+use Symfony\AI\Platform\Result\ExecutableCodeResult;
 use Symfony\AI\Platform\Result\InMemoryRawResult;
+use Symfony\AI\Platform\Result\McpCallResult;
 use Symfony\AI\Platform\Result\MultiPartResult;
 use Symfony\AI\Platform\Result\RawHttpResult;
 use Symfony\AI\Platform\Result\Stream\Delta\TextDelta;
@@ -34,6 +37,7 @@ use Symfony\AI\Platform\Result\StreamResult;
 use Symfony\AI\Platform\Result\TextResult;
 use Symfony\AI\Platform\Result\ThinkingResult;
 use Symfony\AI\Platform\Result\ToolCallResult;
+use Symfony\AI\Platform\Result\WebSearchResult;
 use Symfony\AI\Platform\TokenUsage\TokenUsage;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -226,13 +230,18 @@ class ResultConverterTest extends TestCase
         $this->assertSame('final', $result->getContent());
     }
 
-    public function testConvertSkipsBuiltInToolCallOutputItems()
+    public function testConvertWebSearchCallIntoTypedResultAlongsideMessage()
     {
         $converter = new ResultConverter();
         $httpResponse = $this->createMock(ResponseInterface::class);
         $httpResponse->method('toArray')->willReturn([
             'output' => [
-                ['type' => 'web_search_call', 'id' => 'ws_1', 'status' => 'completed'],
+                [
+                    'type' => 'web_search_call',
+                    'id' => 'ws_1',
+                    'status' => 'completed',
+                    'action' => ['type' => 'search', 'query' => 'latest AI news'],
+                ],
                 [
                     'type' => 'message',
                     'id' => 'msg_1',
@@ -247,8 +256,63 @@ class ResultConverterTest extends TestCase
 
         $result = $converter->convert(new RawHttpResult($httpResponse));
 
-        $this->assertInstanceOf(TextResult::class, $result);
-        $this->assertSame('The answer is 42.', $result->getContent());
+        $this->assertInstanceOf(MultiPartResult::class, $result);
+        $parts = $result->getContent();
+        $this->assertInstanceOf(WebSearchResult::class, $parts[0]);
+        $this->assertSame('latest AI news', $parts[0]->getQuery());
+        $this->assertInstanceOf(TextResult::class, $parts[1]);
+        $this->assertSame('The answer is 42.', $result->asText());
+    }
+
+    public function testConvertCodeInterpreterCall()
+    {
+        $converter = new ResultConverter();
+        $httpResponse = $this->createMock(ResponseInterface::class);
+        $httpResponse->method('toArray')->willReturn([
+            'output' => [
+                [
+                    'type' => 'code_interpreter_call',
+                    'id' => 'ci_1',
+                    'status' => 'completed',
+                    'code' => "print('hi')",
+                    'outputs' => [['type' => 'logs', 'logs' => "hi\n"]],
+                ],
+            ],
+        ]);
+
+        $result = $converter->convert(new RawHttpResult($httpResponse));
+
+        $this->assertInstanceOf(MultiPartResult::class, $result);
+        $parts = $result->getContent();
+        $this->assertInstanceOf(ExecutableCodeResult::class, $parts[0]);
+        $this->assertSame('python', $parts[0]->getLanguage());
+        $this->assertInstanceOf(CodeExecutionResult::class, $parts[1]);
+        $this->assertSame("hi\n", $parts[1]->getContent());
+    }
+
+    public function testConvertMcpCall()
+    {
+        $converter = new ResultConverter();
+        $httpResponse = $this->createMock(ResponseInterface::class);
+        $httpResponse->method('toArray')->willReturn([
+            'output' => [
+                [
+                    'type' => 'mcp_call',
+                    'id' => 'mcp_1',
+                    'status' => 'completed',
+                    'server_label' => 'deepwiki',
+                    'name' => 'ask_question',
+                    'arguments' => '{"q":"hi"}',
+                    'output' => 'the answer',
+                ],
+            ],
+        ]);
+
+        $result = $converter->convert(new RawHttpResult($httpResponse));
+
+        $this->assertInstanceOf(McpCallResult::class, $result);
+        $this->assertSame('deepwiki', $result->getServerLabel());
+        $this->assertSame('the answer', $result->getContent());
     }
 
     public function testContentFilterException()

@@ -1,0 +1,30 @@
+{
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/speech",
+                "signature": "e53163d576cef909071ce7e42e59ee0b",
+                "headers": {
+                    "content-type": [
+                        "application/json"
+                    ],
+                    "authorization": [
+                        "[redacted]"
+                    ]
+                },
+                "body": "{\"model\":\"gpt-4o-mini-tts\",\"input\":\"Hello\",\"voice\":\"nope\",\"response_format\":\"mp3\"}"
+            },
+            "response": {
+                "status": 400,
+                "headers": {
+                    "content-type": [
+                        "application/json"
+                    ]
+                },
+                "body_format": "json",
+                "body": "{\"error\":{\"message\":\"Invalid value: nope. Supported values are: alloy, ash, ballad, coral, echo, fable, onyx, nova, sage, shimmer, and verse.\",\"type\":\"invalid_request_error\",\"param\":\"voice\",\"code\":\"invalid_value\"}}"
+            }
+        }
+    ]
+}

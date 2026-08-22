@@ -4,6 +4,7 @@ CHANGELOG
 0.14
 ----
 
+ * Add `Realtime` model, `Realtime\ModelClient`, `Realtime\ResultConverter`, and catalog entries (`gpt-4o-realtime-preview`, `gpt-4o-mini-realtime-preview`) for `POST /v1/realtime/client_secrets`
  * Add model information to token usage extraction
 
 0.11

@@ -198,12 +198,6 @@ final class ModelCatalog extends AbstractModelCatalog
                     Capability::REALTIME_SESSION,
                 ],
             ],
-            'gpt-realtime-mini' => [
-                'class' => Realtime::class,
-                'capabilities' => [
-                    Capability::REALTIME_SESSION,
-                ],
-            ],
             'gpt-4o-mini-tts' => [
                 'class' => TextToSpeech::class,
                 'capabilities' => [
@@ -212,12 +206,6 @@ final class ModelCatalog extends AbstractModelCatalog
                 ],
             ],
             'gpt-4o-realtime-preview' => [
-                'class' => Realtime::class,
-                'capabilities' => [
-                    Capability::REALTIME_SESSION,
-                ],
-            ],
-            'gpt-realtime' => [
                 'class' => Realtime::class,
                 'capabilities' => [
                     Capability::REALTIME_SESSION,
@@ -573,6 +561,57 @@ final class ModelCatalog extends AbstractModelCatalog
                     Capability::INPUT_PDF,
                 ],
             ],
+            'gpt-6-luna' => [
+                'class' => Gpt::class,
+                'capabilities' => [
+                    Capability::INPUT_MESSAGES,
+                    Capability::OUTPUT_TEXT,
+                    Capability::OUTPUT_STREAMING,
+                    Capability::TOOL_CALLING,
+                    Capability::OUTPUT_STRUCTURED,
+                    Capability::THINKING,
+                    Capability::INPUT_IMAGE,
+                    Capability::INPUT_PDF,
+                ],
+            ],
+            'gpt-6-sol' => [
+                'class' => Gpt::class,
+                'capabilities' => [
+                    Capability::INPUT_MESSAGES,
+                    Capability::OUTPUT_TEXT,
+                    Capability::OUTPUT_STREAMING,
+                    Capability::TOOL_CALLING,
+                    Capability::OUTPUT_STRUCTURED,
+                    Capability::THINKING,
+                    Capability::INPUT_IMAGE,
+                    Capability::INPUT_PDF,
+                ],
+            ],
+            'gpt-daybreak-blue-latest' => [
+                'class' => Gpt::class,
+                'capabilities' => [
+                    Capability::INPUT_MESSAGES,
+                    Capability::OUTPUT_TEXT,
+                    Capability::OUTPUT_STREAMING,
+                    Capability::TOOL_CALLING,
+                    Capability::OUTPUT_STRUCTURED,
+                    Capability::THINKING,
+                    Capability::INPUT_IMAGE,
+                    Capability::INPUT_PDF,
+                ],
+            ],
+            'gpt-daybreak-red-latest' => [
+                'class' => Gpt::class,
+                'capabilities' => [
+                    Capability::INPUT_MESSAGES,
+                    Capability::OUTPUT_TEXT,
+                    Capability::OUTPUT_STREAMING,
+                    Capability::TOOL_CALLING,
+                    Capability::OUTPUT_STRUCTURED,
+                    Capability::THINKING,
+                    Capability::INPUT_IMAGE,
+                ],
+            ],
             'gpt-image-1' => [
                 'class' => Image::class,
                 'capabilities' => [
@@ -601,6 +640,12 @@ final class ModelCatalog extends AbstractModelCatalog
                     Capability::OUTPUT_IMAGE,
                 ],
             ],
+            'gpt-realtime' => [
+                'class' => Realtime::class,
+                'capabilities' => [
+                    Capability::REALTIME_SESSION,
+                ],
+            ],
             'gpt-realtime-2.1' => [
                 'class' => Gpt::class,
                 'capabilities' => [
@@ -612,6 +657,12 @@ final class ModelCatalog extends AbstractModelCatalog
                     Capability::INPUT_IMAGE,
                     Capability::INPUT_AUDIO,
                     Capability::OUTPUT_AUDIO,
+                ],
+            ],
+            'gpt-realtime-mini' => [
+                'class' => Realtime::class,
+                'capabilities' => [
+                    Capability::REALTIME_SESSION,
                 ],
             ],
             'o1' => [
